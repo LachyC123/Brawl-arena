@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover">
+<title>Brawl Arena</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+
+<!-- ═══════ MAIN MENU ═══════ -->
+<div id="menuScreen" class="screen active">
+  <canvas id="menuBgCanvas" class="bg-canvas"></canvas>
+  <div class="menu-content">
+    <div class="game-title"><div class="t1">BRAWL</div><div class="t2">ARENA</div></div>
+    <div class="menu-trophy-bar" id="menuTrophyBar">🏆 <span id="menuTotalTrophies">0</span></div>
+    <div class="menu-coins" id="menuCoins">🪙 <span id="menuCoinCount">0</span></div>
+    <button class="btn btn-play" id="playBtn">⚔️ PLAY</button>
+    <div class="menu-nav">
+      <button class="btn btn-nav" id="brawlersNavBtn">👊 BRAWLERS</button>
+      <button class="btn btn-nav" id="trophyRoadNavBtn">🛣️ ROAD</button>
+      <button class="btn btn-nav btn-packs-nav" id="packsNavBtn">📦 PACKS <span class="pack-badge" id="packBadge" style="display:none">0</span></button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ TROPHY ROAD ═══════ -->
+<div id="trophyRoadScreen" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" data-to="menuScreen">‹</button>
+    <h2>🛣️ TROPHY ROAD</h2>
+    <div class="header-trophy">🏆 <span class="trTrophies">0</span></div>
+  </div>
+  <div class="trophy-road-scroll" id="trophyRoadContent"></div>
+</div>
+
+<!-- ═══════ PACKS INVENTORY ═══════ -->
+<div id="packsScreen" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" data-to="menuScreen">‹</button>
+    <h2>📦 PACKS</h2>
+    <div class="header-coins">🪙 <span class="pCoins">0</span></div>
+  </div>
+  <div class="packs-grid" id="packsGrid"></div>
+</div>
+
+<!-- ═══════ PACK OPENING ═══════ -->
+<div id="packOpenScreen" class="screen">
+  <canvas id="packCanvas" class="bg-canvas"></canvas>
+  <div id="packRevealArea" class="pack-reveal-area"></div>
+  <div id="packSummary" class="pack-summary" style="display:none">
+    <div class="pack-summary-title">REWARDS</div>
+    <div id="packSummaryItems" class="pack-summary-items"></div>
+    <button class="btn btn-primary" id="packDoneBtn">CONTINUE</button>
+  </div>
+</div>
+
+<!-- ═══════ BRAWLER COLLECTION ═══════ -->
+<div id="brawlersScreen" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" data-to="menuScreen">‹</button>
+    <h2>👊 BRAWLERS</h2>
+    <div class="header-count"><span id="unlockedCount">1</span>/12</div>
+  </div>
+  <div class="brawler-collection" id="brawlerGrid"></div>
+</div>
+
+<!-- ═══════ BRAWLER DETAIL / UPGRADE ═══════ -->
+<div id="brawlerDetailScreen" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" data-to="brawlersScreen">‹</button>
+    <h2 id="detailBrawlerName">Brawler</h2>
+    <div class="header-coins">🪙 <span class="dCoins">0</span></div>
+  </div>
+  <div id="brawlerDetailContent" class="brawler-detail-content"></div>
+</div>
+
+<!-- ═══════ CHARACTER SELECT ═══════ -->
+<div id="selectScreen" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" data-to="menuScreen">‹</button>
+    <h2>SELECT BRAWLER</h2>
+  </div>
+  <div class="char-grid" id="selectGrid"></div>
+  <div class="char-info-panel" id="selectInfo"></div>
+  <button class="btn btn-primary btn-fight" id="fightBtn">⚔️ FIGHT</button>
+</div>
+
+<!-- ═══════ MODE SELECT ═══════ -->
+<div id="modeScreen" class="screen">
+  <div class="screen-header">
+    <button class="back-btn" data-to="selectScreen">‹</button>
+    <h2>SELECT MODE</h2>
+  </div>
+  <div class="mode-grid" id="modeGrid">
+    <div class="mode-card" data-mode="showdown">
+      <div class="mode-icon">💀</div>
+      <div class="mode-name">SHOWDOWN</div>
+      <div class="mode-desc">10-player free-for-all. Last one standing wins!</div>
+    </div>
+    <div class="mode-card" data-mode="duoShowdown">
+      <div class="mode-icon">👥</div>
+      <div class="mode-name">DUO SHOWDOWN</div>
+      <div class="mode-desc">5 teams of 2. Survive together!</div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════ GAME SCREEN ═══════ -->
+<div id="gameScreen" class="screen">
+  <canvas id="gameCanvas"></canvas>
+  <div class="hud">
+    <div class="hud-score-info" id="hudScore">10 ALIVE</div>
+    <div class="hud-player-info" id="hudPlayerInfo">
+      <canvas id="hudPortrait" width="36" height="36"></canvas>
+      <div class="hud-player-details">
+        <div class="hud-player-name" id="hudName">Player</div>
+        <div class="hud-power-coins">
+          <span id="hudPower">⚡1</span>
+          <span id="hudCoins">🪙0</span>
+        </div>
+      </div>
+    </div>
+    <div class="hud-bottom-left">
+      <div class="hud-hp-bar-bg"><div class="hud-hp-bar" id="hudHpBar"></div><div class="hud-hp-text" id="hudHpText">3000/3000</div></div>
+      <div class="hud-super-bar-bg"><div class="hud-super-bar" id="hudSuperBar"></div><div class="hud-super-text">SUPER</div></div>
+      <div class="hud-ammo" id="hudAmmo"></div>
+      <div class="hud-ability-row">
+        <button class="hud-gadget-btn" id="gadgetBtn" title="Gadget">🔧<span class="gadget-uses" id="gadgetUses">3</span></button>
+        <button class="hud-super-btn" id="superBtn">SUPER</button>
+      </div>
+    </div>
+    <div class="hud-bottom-right"><canvas id="minimapCanvas" class="minimap-canvas" width="120" height="120"></canvas></div>
+  </div>
+  <div class="joystick-area joystick-left" id="joystickLeft"></div>
+  <div class="joystick-area joystick-right" id="joystickRight"></div>
+</div>
+
+<!-- ═══════ GAME OVER ═══════ -->
+<div id="gameOverScreen" class="screen">
+  <div class="result-container" id="resultContainer"></div>
+</div>
+
+</div>
+<script src="game.js"></script>
+</body>
+</html>
